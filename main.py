@@ -6,7 +6,7 @@ import numpy as np
 from util import classify, set_background
 
 
-set_background('/bgs/bg5.png')
+set_background(st, './bgs/bg5.png')
 
 # set title
 st.title('Pneumonia classification')
