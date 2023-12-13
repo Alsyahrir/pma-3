@@ -1,14 +1,15 @@
 import base64
-from PIL import Image
-import numpy as np
-import io
 
-def set_background(st, image_file):
+import streamlit as st
+from PIL import ImageOps, Image
+import numpy as np
+
+
+def set_background(image_file):
     """
     This function sets the background of a Streamlit app to an image specified by the given image file.
 
     Parameters:
-        st: Streamlit object
         image_file (str): The path to the image file to be used as the background.
 
     Returns:
@@ -28,24 +29,21 @@ def set_background(st, image_file):
     st.markdown(style, unsafe_allow_html=True)
 
 
-def classify(image_data, model, class_names):
+def classify(image, model, class_names):
     """
-    This function takes raw image data, a model, and a list of class names and returns the predicted class and confidence
+    This function takes an image, a model, and a list of class names and returns the predicted class and confidence
     score of the image.
 
     Parameters:
-        image_data (bytes): Raw image data from Streamlit file uploader.
+        image (PIL.Image.Image): An image to be classified.
         model (tensorflow.keras.Model): A trained machine learning model for image classification.
         class_names (list): A list of class names corresponding to the classes that the model can predict.
 
     Returns:
         A tuple of the predicted class name and the confidence score for that prediction.
     """
-    # Convert raw image data to PIL Image
-    image = Image.open(io.BytesIO(image_data)).convert('RGB')
-
-    # Resize image to (224, 224)
-    image = image.resize((224, 224))
+    # convert image to (224, 224)
+    image = ImageOps.fit(image, (224, 224), Image.Resampling.LANCZOS)
 
     # convert image to numpy array
     image_array = np.asarray(image)
@@ -59,6 +57,7 @@ def classify(image_data, model, class_names):
 
     # make prediction
     prediction = model.predict(data)
+    # index = np.argmax(prediction)
     index = 0 if prediction[0][0] > 0.95 else 1
     class_name = class_names[index]
     confidence_score = prediction[0][index]
