@@ -17,10 +17,10 @@ st.header('Please upload a chest X-ray image')
 file = st.file_uploader('', type=['jpeg', 'jpg', 'png'])
 
 # Load classifier
-model = load_model('./model/harist.h5')
+model = load_model('./model/harist.h5',compile=False)
 
 # Load class names
-with open('./model/labels.txt', 'r') as f:
+with open('./model/labels.txt', 'r') as f
     class_names = [a.strip() for a in f.readlines()]
 
 # Display image
