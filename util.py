@@ -4,7 +4,7 @@ import streamlit as st
 from PIL import ImageOps, Image
 import numpy as np
 
-import cv2 
+
 
 
 def set_background(image_file):
